@@ -189,7 +189,8 @@ class WriterGUI:
 
     def create_interface(self):
         with gr.Blocks(
-            theme=gr.themes.Default(spacing_size="sm", text_size="sm")
+            theme=gr.themes.Default(spacing_size="sm", text_size="sm"),
+            title="Quality Essay Writer",
         ) as demo:
 
             def updt_disp():

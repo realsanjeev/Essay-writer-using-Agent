@@ -1,13 +1,12 @@
-# Standard library imports
+import os
 import sqlite3
-
-from dotenv import load_dotenv
 
 # Third-party imports
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_openai import ChatOpenAI
 from langgraph.checkpoint.sqlite import SqliteSaver
 from langgraph.graph import END, StateGraph
+from tavily import TavilyClient
 
 # Local module imports
 from .agent_state import AgentState, Queries
@@ -19,12 +18,11 @@ from .constants import (
     WRITER_PROMPT,
 )
 
-_ = load_dotenv()
-
 
 class Agent:
     def __init__(self, model="gpt-3.5-turbo"):
         self.model = ChatOpenAI(model=model, temperature=0)
+        self.tavily = TavilyClient(api_key=os.environ["TAVILY_API_KEY"])
         self.PLAN_PROMPT = PLAN_PROMPT
         self.WRITER_PROMPT = WRITER_PROMPT
         self.RESEARCH_PLAN_PROMPT = RESEARCH_PLAN_PROMPT
