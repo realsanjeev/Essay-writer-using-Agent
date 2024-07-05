@@ -1,0 +1,13 @@
+langchain
+langchainhub
+langchain-community
+langgraph
+ollama
+
+tavily-python
+# need addtional support for the installation process
+pygraphviz # https://pygraphviz.github.io/documentation/stable/install.html
+aiosqlite # https://aiosqlite.omnilib.dev/en/latest/
+
+notebook
+pre-commit
