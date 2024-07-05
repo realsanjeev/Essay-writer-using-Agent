@@ -1,8 +1,11 @@
+python-dotenv
 langchain
 langchainhub
 langchain-community
+langchain-openai
 langgraph
 ollama
+gradio #For UI
 
 tavily-python
 # need addtional support for the installation process

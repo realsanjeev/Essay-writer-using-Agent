@@ -9,9 +9,8 @@ from langchain_openai import ChatOpenAI
 from langgraph.checkpoint.sqlite import SqliteSaver
 from langgraph.graph import END, StateGraph
 
-from .agent_state import AgentState, Queries
-
 # Local module imports
+from .agent_state import AgentState, Queries
 from .constants import (
     PLAN_PROMPT,
     REFLECTION_PROMPT,
