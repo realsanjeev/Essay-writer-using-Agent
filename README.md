@@ -34,7 +34,7 @@ To get started with the Essay Writer Using Agent, follow these steps:
 3. **Modular Development:** Evaluating and improving each agent individually is easier and doesn't affect the larger application.
 4. **Divide and Conquer:** Multi-agent designs break complex problems into manageable tasks, allowing specialized agents and LLM programs to target each unit effectively.
 
-##### Agent Connection
+### Agent Connection
 The **router** primarily manages state transitions. After each LLM call, it examines the output. If a tool is invoked, it calls that tool. If the LLM responds with "FINAL ANSWER," it returns the response to the user. If neither condition is met, it passes the task to another LLM.
 ![Multi-agent Diagram](images/multi-agent.png)
 
