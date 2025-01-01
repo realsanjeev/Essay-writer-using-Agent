@@ -105,25 +105,25 @@ class WriterGUI:
         for state in self.graph.get_state_history(self.thread):
             if state.metadata["step"] < 1:
                 continue
-            thread_ts = state.config["configurable"]["thread_ts"]
+            checkpoint_id = state.config["configurable"]["checkpoint_id"]
             tid = state.config["configurable"]["thread_id"]
             count = state.values["count"]
             lnode = state.values["lnode"]
             rev = state.values["revision_number"]
             nnode = state.next
-            st = f"{tid}:{count}:{lnode}:{nnode}:{rev}:{thread_ts}"
+            st = f"{tid}:{count}:{lnode}:{nnode}:{rev}:{checkpoint_id}"
             hist.append(st)
         return gr.Dropdown(
-            label="update_state from: thread:count:last_node:next_node:rev:thread_ts",
+            label="update_state from: thread:count:last_node:next_node:rev:checkpoint_id",
             choices=hist,
             value=hist[0],
             interactive=True,
         )
 
-    def find_config(self, thread_ts):
+    def find_config(self, checkpoint_id):
         for state in self.graph.get_state_history(self.thread):
             config = state.config
-            if config["configurable"]["thread_ts"] == thread_ts:
+            if config["configurable"]["checkpoint_id"] == checkpoint_id:
                 return config
         return None
 
@@ -131,22 +131,22 @@ class WriterGUI:
         """result of selecting an old state from the step pulldown. Note does not change thread.
         This copies an old state to a new current state.
         """
-        thread_ts = hist_str.split(":")[-1]
-        # print(f"copy_state from {thread_ts}")
-        config = self.find_config(thread_ts)
+        checkpoint_id = hist_str.split(":")[-1]
+        # print(f"copy_state from {checkpoint_id}")
+        config = self.find_config(checkpoint_id)
         # print(config)
         state = self.graph.get_state(config)
         self.graph.update_state(
             self.thread, state.values, as_node=state.values["lnode"]
         )
         new_state = self.graph.get_state(self.thread)  # should now match
-        new_thread_ts = new_state.config["configurable"]["thread_ts"]
+        new_checkpoint_id = new_state.config["configurable"]["checkpoint_id"]
         new_state.config["configurable"]["thread_id"]
         count = new_state.values["count"]
         lnode = new_state.values["lnode"]
         rev = new_state.values["revision_number"]
         nnode = new_state.next
-        return lnode, nnode, new_thread_ts, rev, count
+        return lnode, nnode, new_checkpoint_id, rev, count
 
     def update_thread_pd(
         self,
@@ -201,13 +201,14 @@ class WriterGUI:
                 for state in self.graph.get_state_history(self.thread):
                     if state.metadata["step"] < 1:  # ignore early states
                         continue
-                    s_thread_ts = state.config["configurable"]["thread_ts"]
+                    print(state.config["configurable"])
+                    s_checkpoint_id = state.config["configurable"]["checkpoint_id"]
                     s_tid = state.config["configurable"]["thread_id"]
                     s_count = state.values["count"]
                     s_lnode = state.values["lnode"]
                     s_rev = state.values["revision_number"]
                     s_nnode = state.next
-                    st = f"{s_tid}:{s_count}:{s_lnode}:{s_nnode}:{s_rev}:{s_thread_ts}"
+                    st = f"{s_tid}:{s_count}:{s_lnode}:{s_nnode}:{s_rev}:{s_checkpoint_id}"
                     hist.append(st)
                 if not current_state.metadata:  # handle init call
                     return {}
@@ -226,7 +227,7 @@ class WriterGUI:
                             interactive=True,
                         ),
                         step_pd: gr.Dropdown(
-                            label="update_state from: thread:count:last_node:next_node:rev:thread_ts",
+                            label="update_state from: thread:count:last_node:next_node:rev:checkpoint_id",
                             choices=hist,
                             value=hist[0],
                             interactive=True,

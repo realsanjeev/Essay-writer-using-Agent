@@ -4,7 +4,7 @@ import sqlite3
 # Third-party imports
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_openai import ChatOpenAI
-from langgraph.checkpoint.sqlite import SqliteSaver
+from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import END, StateGraph
 from tavily import TavilyClient
 
@@ -42,7 +42,7 @@ class Agent:
         builder.add_edge("research_plan", "generate")
         builder.add_edge("reflect", "research_critique")
         builder.add_edge("research_critique", "generate")
-        memory = SqliteSaver(conn=sqlite3.connect(":memory:", check_same_thread=False))
+        memory = MemorySaver()
         self.graph = builder.compile(
             checkpointer=memory,
             interrupt_after=[
