@@ -4,6 +4,7 @@ langchainhub
 langchain-community
 langchain-openai
 langgraph
+langgraph-checkpoint-sqlite
 ollama
 gradio #For UI
 

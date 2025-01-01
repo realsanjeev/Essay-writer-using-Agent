@@ -4,13 +4,13 @@ To get started with the Essay Writer Using Agent, follow these steps:
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/realsanjeev/Essay-writer-using-Agent.git
    cd Essay-writer-using-Agent
    ```
 
 2. **Set up virtual environment and install dependencies**
    ```bash
-   python -m venv venv
+   python3 -m venv venv
    source venv/bin/activate   # On Windows use `venv\Scripts\activate`
    pip install -r requirements.txt
    ```
