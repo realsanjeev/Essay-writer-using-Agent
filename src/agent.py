@@ -1,5 +1,4 @@
 import os
-import sqlite3
 
 # Third-party imports
 from langchain_core.messages import HumanMessage, SystemMessage
@@ -20,8 +19,10 @@ from .constants import (
 
 
 class Agent:
-    def __init__(self, model="gpt-3.5-turbo"):
-        self.model = ChatOpenAI(model=model, temperature=0)
+    def __init__(self, model="openai/gpt-4o"):
+        self.model = ChatOpenAI(
+            model=model, temperature=0, base_url="https://openrouter.ai/api/v1"
+        )
         self.tavily = TavilyClient(api_key=os.environ["TAVILY_API_KEY"])
         self.PLAN_PROMPT = PLAN_PROMPT
         self.WRITER_PROMPT = WRITER_PROMPT
@@ -87,9 +88,17 @@ class Agent:
 
     def generation_node(self, state: AgentState):
         content = "\n\n".join(state["content"] or [])
-        user_message = HumanMessage(
-            content=f"{state['task']}\n\nHere is my plan:\n\n{state['plan']}"
-        )
+        user_message_content = f"{state['task']}\n\nHere is my plan:\n\n{state['plan']}"
+        if state.get("draft") and state["draft"] != "no draft":
+            user_message_content += (
+                f"\n\nHere is my previous draft:\n\n{state['draft']}"
+            )
+        if state.get("critique") and state["critique"] != "no critique":
+            user_message_content += (
+                f"\n\nHere is the critique I received:\n\n{state['critique']}"
+            )
+
+        user_message = HumanMessage(content=user_message_content)
         messages = [
             SystemMessage(content=self.WRITER_PROMPT.format(content=content)),
             user_message,
